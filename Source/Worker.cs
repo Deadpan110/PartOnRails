@@ -130,7 +130,8 @@ namespace PartOnRails
 							continue;
 						}
 
-						PartOnRails.LogDebug ("Invoking Part {0} with id {1} at {2} in {3)", part.partName, part.flightID, methodName, moduleName);
+						//PartOnRails.LogDebug ("Invoking Part {0} with id {1} at {2} in {3)", part.partName, part.flightID, methodName, moduleName);
+						PartOnRails.LogDebug ("Invoking Part {0} with id {1} at {2}", part.partName, part.flightID, methodName);
 						object[] args = new object[] { part };
 						callback.InvokeMember(
 							methodName,
