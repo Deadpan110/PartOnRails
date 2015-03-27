@@ -107,7 +107,6 @@ namespace PartOnRails
 			}
 			foreach (KeyValuePair<uint, PartOnRails> pair in PartsOnRails)
 			{
-				PartOnRails.LogDebug(pair.Value.moduleName);
 				string moduleName = pair.Value.moduleName;
 				ProtoPartSnapshot part = pair.Value.part;
 
@@ -131,7 +130,7 @@ namespace PartOnRails
 							continue;
 						}
 
-						PartOnRails.LogDebug ("Invoking Part {0} with id {1} at {2}", part.partName, part.flightID, methodName);
+						PartOnRails.LogDebug ("Invoking Part {0} with id {1} at {2} in {3)", part.partName, part.flightID, methodName, moduleName);
 						object[] args = new object[] { part };
 						callback.InvokeMember(
 							methodName,
