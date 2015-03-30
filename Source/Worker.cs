@@ -26,12 +26,12 @@ namespace PartOnRails
 					if (debug != null)
 					{
 						PartOnRails.debug = true;
-						PartOnRails.LogDebug("Debug Logging active");
+						PartOnRails.DebugLog("Debug Logging active");
 					}
 				}
 			}
 			if (HighLogic.LoadedScene == GameScenes.MAINMENU) {
-				PartOnRails.LogDebug ("Caching AssemblyQualifiedNames");
+				PartOnRails.DebugLog ("Caching AssemblyQualifiedNames");
 				// Store the module class and namespace for location lookup
 				// took me a while to figure out where this was available when vessel is not in focus
 				// loosely based on solution found in:
@@ -43,7 +43,7 @@ namespace PartOnRails
 								if (qualifiedNames.ContainsKey (m.ClassName)) {
 									continue;
 								}
-								PartOnRails.LogDebug ("Part Module {0},{1} cached", m.GetType ().Namespace, m.ClassName);
+								PartOnRails.DebugLog ("Part Module {0},{1} cached", m.GetType ().Namespace, m.ClassName);
 								qualifiedNames.Add (m.ClassName, m.GetType().AssemblyQualifiedName);
 							}
 						}
@@ -59,7 +59,7 @@ namespace PartOnRails
 			{
 				return;
 			}
-			PartOnRails.LogDebug ("Worker.Start");
+			PartOnRails.DebugLog ("Worker.Start");
 			UpdatePartsOnRails();
 			StartCoroutine(PartOnRailsLoop ("PartOnRailsStart"));
 		}
@@ -70,7 +70,7 @@ namespace PartOnRails
 		// I also feel there are too many foreach loops here... is there a faster way?
 		void UpdatePartsOnRails()
 		{
-			PartOnRails.LogDebug("Worker.UpdatePartsOnRails - Looking for parts");
+			PartOnRails.DebugLog("Worker.UpdatePartsOnRails - Looking for parts");
 			if (FlightGlobals.fetch != null)
 			{
 				foreach (var v in FlightGlobals.Vessels)
@@ -83,7 +83,7 @@ namespace PartOnRails
 							{
 								if (qualifiedNames.ContainsKey(module.moduleName))
 								{
-									PartOnRails.LogDebug("Part {0} with id {1} contains PartOnRails in {2} ", part.partName, part.flightID, module.moduleName);
+									PartOnRails.DebugLog("Part {0} with id {1} contains PartOnRails in {2} ", part.partName, part.flightID, module.moduleName);
 
 									// Add or update Dictionary like an array
 									PartsOnRails [part.flightID] = new PartOnRails (module.moduleName, part);
@@ -100,10 +100,10 @@ namespace PartOnRails
 		// Coroutine loop - needs work!!!
 		IEnumerator PartOnRailsLoop(string methodName)
 		{
-			PartOnRails.LogDebug("Worker.PartOnRailsLoop - {0}", methodName);
+			PartOnRails.DebugLog("Worker.PartOnRailsLoop - {0}", methodName);
 
 			if (PartsOnRails.Count <= 0) {
-				PartOnRails.LogDebug("PartsOnRails Dictionary empty");
+				PartOnRails.DebugLog("PartsOnRails Dictionary empty");
 			}
 			foreach (KeyValuePair<uint, PartOnRails> pair in PartsOnRails)
 			{
@@ -112,7 +112,7 @@ namespace PartOnRails
 
 				if (part.pVesselRef.vesselRef.loaded)
 				{
-					PartOnRails.LogDebug("Part {0} with id {1} is loaded - skipping", part.partName, part.flightID);
+					PartOnRails.DebugLog("Part {0} with id {1} is loaded - skipping", part.partName, part.flightID);
 					continue;
 				}
 
@@ -126,12 +126,12 @@ namespace PartOnRails
 
 						var methodInfo = callback.GetMethod(methodName, new Type[] { typeof(ProtoPartSnapshot) });
 						if (methodInfo == null) {
-							PartOnRails.LogDebug ("Part {0} with id {1} has no {2} - skipping", part.partName, part.flightID, methodName);
+							PartOnRails.DebugLog ("Part {0} with id {1} has no {2} - skipping", part.partName, part.flightID, methodName);
 							continue;
 						}
 
-						//PartOnRails.LogDebug ("Invoking Part {0} with id {1} at {2} in {3)", part.partName, part.flightID, methodName, moduleName);
-						PartOnRails.LogDebug ("Invoking Part {0} with id {1} at {2}", part.partName, part.flightID, methodName);
+						//PartOnRails.DebugLog ("Invoking Part {0} with id {1} at {2} in {3)", part.partName, part.flightID, methodName, moduleName);
+						PartOnRails.DebugLog ("Invoking Part {0} with id {1} at {2}", part.partName, part.flightID, methodName);
 						object[] args = new object[] { part };
 						callback.InvokeMember(
 							methodName,
@@ -144,7 +144,7 @@ namespace PartOnRails
 					}
 					catch (Exception e)
 					{
-						PartOnRails.LogDebug("An exception occured. Details:\n{0}", e.ToString());
+						PartOnRails.DebugLog("An exception occured. Details:\n{0}", e.ToString());
 					}
 				}
 				yield return null;

@@ -15,18 +15,32 @@ namespace PartOnRails
 		public string moduleName { get; set; }
 		public ProtoPartSnapshot part { get; set; }
 
+
 		public PartOnRails(string moduleName, ProtoPartSnapshot part) {
 			this.moduleName = moduleName;
 			this.part = part;
 		}
 
-		public static void LogDebug(String Message, params object[] strParams)
+
+		public static void DebugLog(string text)
 		{
-			if (!PartOnRails.debug) {
-				return;
-			}
-			Message = String.Format(Message, strParams);
-			Debug.Log("[PartOnRails]: " + Message);
+			if (PartOnRails.debug) Debug.Log("[PartOnRails]: " + text);
+		}
+		public static void DebugLog(string text, params object[] strParams)
+		{
+			if (PartOnRails.debug) Debug.Log("[PartOnRails]: " + string.Format(text, strParams));
+		}
+		public static void DebugLog(UnityEngine.Object context)
+		{
+			if (PartOnRails.debug) Debug.Log("[PartOnRails]: ", context);
+		}
+		public static void DebugWarning(string text)
+		{
+			if (PartOnRails.debug) Debug.LogWarning("[PartOnRails]: " + text);
+		}
+		public static void DebugError(string text)
+		{
+			if (PartOnRails.debug) Debug.LogError("[PartOnRails]: " + text);
 		}
 	}
 }
